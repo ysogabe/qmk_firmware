@@ -19,12 +19,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
-extern keymap_config_t keymap_config;
+#include "version.h"
+#include "keymap_jp.h" 
+#include "sendstring_jis.h"
+
+// extern keymap_config_t keymap_config;
 
 #define _QWERTY 0
-#define _LOWER 2
-#define _RAISE 4
-#define _ADJUST 8
+#define _LOWER 1
+#define _RAISE 2
+#define _ADJUST 3
 
 enum custom_keycodes {
   KL_QWERTY = SAFE_RANGE,
@@ -33,71 +37,41 @@ enum custom_keycodes {
   KL_ADJUST
 };
 
-
-// See. https://github.com/qmk/qmk_firmware/blob/master/keyboards/planck/keymaps/rai-suta/keymap.c
-#include "version.h"
-#include "sendstring_jis.h"
-
-// JIS keyboard
-#define JK_CIRC KC_EQL      // ^
-#define JK_AT   KC_LBRC     // @
-#define JK_LBRC KC_RBRC     // [
-#define JK_CLN  KC_QUOT     // :
-#define JK_RBRC KC_BSLS     // ]
-#define JK_BSLS KC_RO       // Backslash(\)
-#define JK_DQT  S(KC_2)     // "
-#define JK_AMPR S(KC_6)     // &
-#define JK_SQT  S(KC_7)     // '
-#define JK_LPRN S(KC_8)     // (
-#define JK_RPRN S(KC_9)     // )
-#define JK_S0   S(KC_0)     // Tilde(~) at IBM 5576-A01 spec
-#define JK_EQ   S(KC_MINS)  // =
-#define JK_TLD  S(JK_CIRC)  // ~
-#define JK_PIPE S(KC_JYEN)  // |
-#define JK_GRV  S(JK_AT)    // `
-#define JK_LCBR S(JK_LBRC)  // {
-#define JK_PLUS S(KC_SCLN)  // +
-#define JK_ASTR S(JK_CLN)   // *
-#define JK_RCBR S(JK_RBRC)  // }
-#define JK_QUES S(KC_SLSH)  // ?
-#define JK_UNDS S(JK_BSLS)  // _
-
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, JK_CLN,
+      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, JP_SCLN, JP_COLN,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_ESC,
+      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, JP_COMM,  JP_DOT, KC_SLSH,  KC_RSFT,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                         KC_LGUI, KL_LOWER,  KC_SPC,  KC_ENT,   KL_RAISE, KC_RALT
+                                         KC_LGUI, KL_LOWER,  KC_ENT,   KC_SPC,   KL_RAISE, KC_RALT
                                       //`--------------------------'  `--------------------------'
 
   ),
 
   [_LOWER] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSPC,
+      KC_ESC,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_F10,                       KC_MINS, KC_EQL, KC_SCLN, JK_CLN,   JK_AT, KC_JYEN,
+      KC_LCTL, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,   KC_F10,                       JP_CIRC, JP_EQL, JP_TILD, JP_AT,  JP_PLUS, JP_ASTR ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LANG2,                    KC_LANG1, XXXXXXX, KC_COMM, KC_DOT, KC_SLSH, JK_UNDS,
+      KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LANG2,                    KC_LANG1, XXXXXXX, JP_LABK, JP_RABK, JP_QUES, KC_RSFT,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI, _______,  KC_SPC,     KC_ENT,   KL_ADJUST, KC_RALT
+                                          KC_LGUI, _______,  KC_ENT,     KC_SPC,   _______, KC_RALT
                                       //`--------------------------'  `--------------------------'
   ),
 
   [_RAISE] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_GESC, KC_EXLM,   JK_DQT, KC_HASH,  KC_DLR, KC_PERC,                      JK_AMPR, JK_SQT, JK_LPRN, JK_RPRN,   JK_S0, KC_BSPC,
+      KC_GESC, JP_EXLM,   JP_DQUO, JP_HASH,  JP_DLR, JP_PERC,                    JP_AMPR, JP_QUOT, JP_LPRN, JP_RPRN, JP_MINS, KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_F12,                     JK_LBRC , JK_RBRC, JK_PLUS, JK_ASTR,  JK_GRV, JK_PIPE,
+      KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_F12,                     JP_LBRC , JP_RBRC, XXXXXXX, JP_GRV,  XXXXXXX, JP_PIPE,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      JK_LCBR, JK_RCBR, KC_LABK, KC_RABK, JK_QUES, JK_UNDS,
+      KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      JP_LCBR, JP_RCBR, XXXXXXX,  JP_YEN, JP_BSLS, JP_UNDS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   KL_ADJUST,  KC_SPC,     KC_ENT, _______, KC_RALT
+                                          KC_LGUI, _______,  KC_ENT,     KC_SPC, _______, KC_RALT
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -109,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RESET,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI, _______,  KC_SPC,     KC_ENT, _______, KC_RALT
+                                          KC_LGUI, _______,  KC_ENT,     KC_SPC, _______, KC_RALT
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -162,7 +136,9 @@ const char code_to_name[60] = {
 void set_keylog(uint16_t keycode, keyrecord_t *record) {
   char name = ' ';
     if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
-        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) { keycode = keycode & 0xFF; }
+        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX) ||
+        keycode >= SAFE_RANGE
+        ) { keycode = keycode & 0xFF; }
   if (keycode < 60) {
     name = code_to_name[keycode];
   }
@@ -245,6 +221,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (lower_pressed && (TIMER_DIFF_16(record->event.time, lower_pressed_time) < TAPPING_TERM)) {
           register_code(KC_LANG2); // for macOS
           unregister_code(KC_LANG2);
+#ifdef OLED_ENABLE
+    set_keylog(KC_LANG2, record);
+#endif // OLED_ENABLE
         }
         lower_pressed = false;
       }
@@ -264,6 +243,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (raise_pressed && (TIMER_DIFF_16(record->event.time, raise_pressed_time) < TAPPING_TERM)) {
           register_code(KC_LANG1); // for macOS
           unregister_code(KC_LANG1);
+#ifdef OLED_ENABLE
+    set_keylog(KC_LANG1, record);
+#endif // OLED_ENABLE
         }
         raise_pressed = false;
       }
