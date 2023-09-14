@@ -103,6 +103,8 @@ __pycache__
 # Allow to exist but don't include it in the repo
 user_song_list.h
 
+# Hex Backup
+crkbd_rev1_ysogabe.hex.current
 # clangd
 compile_commands.json
 .clangd/
